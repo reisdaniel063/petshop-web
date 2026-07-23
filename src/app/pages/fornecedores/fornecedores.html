@@ -1,0 +1,37 @@
+<h2>Fornecedores</h2>
+
+<form [formGroup]="form" (ngSubmit)="salvar()">
+    <input formControlName="nome" placeholder="Nome" />
+    <input formControlName="contato" placeholder="Contato" />
+    <button type="submit" [disabled]="form.invalid || salvando()">
+        {{ salvando() ? 'Salvando...' : 'Salvar' }}
+    </button>
+</form>
+
+@if (erroSalvar()) {
+  <p>{{ erroSalvar() }}</p>
+}
+@if(carregando()) {
+<p>Carregando...</p>
+} @else if(erro()) {
+<p>{{ erro() }}</p>
+} @else if(fornecedores().length === 0){
+<p>Nenhum fornecedor encontrado.</p>
+} @else {
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Contato</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (f of fornecedores(); track f.id) {
+        <tr>
+            <td>{{ f.nome }}</td>
+            <td>{{ f.contato }}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
