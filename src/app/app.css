@@ -1,0 +1,12 @@
+nav{
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+nav a {
+    text-decoration: none;
+}
+nav a.ativo {
+    font-weight: bold;
+    text-decoration: underline;
+}
