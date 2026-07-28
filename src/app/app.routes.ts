@@ -6,5 +6,10 @@ export const routes: Routes = [
         path: 'fornecedores',
         loadComponent: () =>
             import('./pages/fornecedores/fornecedores').then(m => m.Fornecedores)
-    }
+    },
+    {
+    path: 'produtos',
+    loadComponent: () =>
+      import('./pages/produtos/produtos').then(m => m.Produtos)
+  }
 ];
