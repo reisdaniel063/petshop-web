@@ -13,3 +13,9 @@ export interface CriarProduto {
     estoqueMinimo: number;
     fornecedorId: string;
 }
+
+export interface AtualizarProduto {
+    nome: string;
+    unidade: string;
+    estoqueMinimo: number;
+}

@@ -19,4 +19,5 @@ export class FornecedorApi {
     criar(dto: CriarFornecedor): Observable<Fornecedor> { 
         return this.http.post<Fornecedor>(this.url, dto)
     }
+   
 }

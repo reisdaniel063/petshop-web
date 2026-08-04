@@ -1,32 +1,65 @@
 <h2>Produtos</h2>
 
+<form [formGroup]="form" (ngSubmit)="salvar()">
+  <input formControlName="nome" placeholder="Nome" />
+  <input formControlName="unidade" placeholder="Unidade" />
+  <input formControlName="estoqueAtual" type="number" placeholder="Estoque atual" />
+  <input formControlName="estoqueMinimo" type="number" placeholder="Estoque mínimo" />
+
+
+  <select formControlName="fornecedorId">
+    <option value="">Selecione um fornecedor</option>
+    @for (f of fornecedores(); track f.id){
+    <option [value]="f.id">{{ f.nome }}</option>
+    }
+  </select>
+
+  <button type="submit" [disabled]="form.invalid || salvando()">
+    {{ salvando() ? 'Salvando... ' : (editandoId() ? 'Atualizar' : 'Salvar') }}
+  </button>
+
+  @if(editandoId()){
+  <button type="button" (click)="cancelarEdicao()">Cancelar</button>
+  }
+</form>
+
+
+@if (erroSalvar()) {
+<p>{{ erroSalvar() }}</p>
+}
+
+
 @if (carregando()) {
-  <p>Carregando...</p>
+<p>Carregando...</p>
 } @else if (erro()) {
-  <p>{{ erro() }}</p>
+<p>{{ erro() }}</p>
 } @else if (produtos().length === 0) {
-  <p>Nenhum produto cadastrado ainda.</p>
+<p>Nenhum produto cadastrado ainda.</p>
 } @else {
-  <table>
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Unidade</th>
-        <th>Estoque atual</th>
-        <th>Estoque mínimo</th>
-        <th>Fornecedor</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (p of produtos(); track p.id) {
-        <tr>
-          <td>{{ p.nome }}</td>
-          <td>{{ p.unidade }}</td>
-          <td>{{ p.estoqueAtual }}</td>
-          <td>{{ p.estoqueMinimo }}</td>
-          <td>{{ p.nomeFornecedor }}</td>
-        </tr>
-      }
-    </tbody>
-  </table>
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Unidade</th>
+      <th>Estoque atual</th>
+      <th>Estoque mínimo</th>
+      <th>Fornecedor</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (p of produtos(); track p.id) {
+    <tr>
+      <td>{{ p.nome }}</td>
+      <td>{{ p.unidade }}</td>
+      <td>{{ p.estoqueAtual }}</td>
+      <td>{{ p.estoqueMinimo }}</td>
+      <td>{{ p.nomeFornecedor }}</td>
+      <td>
+        <button type="button" (click)="editar(p)">Editar</button>
+        <button type="button" (click)="excluir(p)">Excluir</button>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
 }
