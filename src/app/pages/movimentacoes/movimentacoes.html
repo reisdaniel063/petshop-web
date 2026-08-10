@@ -1,0 +1,66 @@
+<h2>Registrar Movimentação</h2>
+
+<form [formGroup]="form" (ngSubmit)="salvar()">
+    <select formControlName="produtoId">
+        <option value="">Selecione um produto</option>
+        @for(p of produtos(); track p.id) {
+            <option [value]="p.id">{{ p.nome }}</option>
+        }
+    </select>
+
+    <select formControlName="tipo">
+        @for (t of tipos; track t.valor){
+            <option [value]="t.valor">{{ t.rotulo }}</option>
+        }
+    </select>
+
+    <input formControlName="quantidade" type="number" placeholder="Quantidade" />
+    <input formControlName="observacao" placeholder="Observação (opcional)" />
+
+    <button type="submit" [disabled]="form.invalid || salvando()">
+        {{salvando () ? 'Registrando...' : 'Registrar'}}
+    </button>
+</form>
+
+@if (mensagem()) {
+    <p>{{ mensagem () }}</p>
+}
+@if(erro()) {
+    <p>{{ erro() }}</p>
+}
+
+<h2>Historico</h2>
+
+<select (change)="verHistorico($any($event.target).value)">
+    <option value="">Selecione um produto para ver o historico</option>
+    @for (p of produtos(); track p.id){
+        <option [value]="p.id">{{ p.nome }}</option>
+    }
+</select>
+@if(carregandoHistorico()){
+    <p>Carregando Historico...</p>
+} @else if(produtoSelecionado() && historico().length ===0) {
+    <p>Nenhuma movimentação neste período.</p>
+} @else if(historico().length > 0){
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Quantidade</th>
+                <th>Observação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (m of historico(); track m.id){
+                <tr>
+                    <td>{{ m.data | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ rotuloTipo(m.tipo) }}</td>
+                    <td>{{ m.quantidade }}</td>
+                    <td>{{ m.observacao }}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
