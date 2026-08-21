@@ -1,0 +1,67 @@
+<h2>Gerar Ordem de Compra</h2>
+
+<select (change)="selecionarFornecedor($any($event.target).value)">
+    <option value="">Selecione um fornecedor</option>
+    @for (f of fornecedores(); track f.id) {
+    <option [value]="f.id">{{ f.nome }}</option>
+    }
+</select>
+
+@if(fornecedorSelecionado()){
+@if (produtosDoFornecedor().length === 0){
+<p>Este fornecedor nao tem produtos cadastrados</p>
+} @else {
+<h3>Produtos</h3>
+<ul>
+    @for(p of produtosDoFornecedor(); track p.id){
+    <li>
+        <label>
+            <input type="checkbox" [checked]="marcados().has(p.id)" (change)="alternar(p.id)" />
+            {{ p.nome }} - estoque atual: {{ p.estoqueAtual }}
+        </label>
+    </li>
+    }
+</ul>
+
+
+<button type="button" [disabled]="marcados().size === 0" (click)="gerar()">
+    Gerar ordem ({{ marcados().size }} selecionado(s))
+</button>
+}
+}
+@if (gerando()) {
+<p>Gerando ordem...</p>
+}
+
+@if (erro()) {
+<p>{{ erro() }}</p>
+}
+
+@if (ordemGerada(); as ordem) {
+<h3>Ordem para {{ ordem.nomeFornecedor }} — {{ ordem.mes }}/{{ ordem.ano }}</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Unidade</th>
+            <th>Média mensal</th>
+            <th>Estoque atual</th>
+            <th>Sugestão de compra</th>
+            <th>Precisa comprar?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (item of ordem.itens; track item.nomeProduto) {
+        <tr>
+            <td>{{ item.nomeProduto }}</td>
+            <td>{{ item.unidade }}</td>
+            <td>{{ item.mediaCalculada }}</td>
+            <td>{{ item.estoqueAtual }}</td>
+            <td>{{ item.quantidadeSugerida }}</td>
+            <td>{{ item.necessitaCompra ? 'Sim' : 'Não' }}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

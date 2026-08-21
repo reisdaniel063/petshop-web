@@ -4,6 +4,7 @@ export interface Produto {
     unidade: string;
     estoqueAtual: number;
     estoqueMinimo: number;
+    fornecedorId: string;
     nomeFornecedor: string;
 }
 export interface CriarProduto {
