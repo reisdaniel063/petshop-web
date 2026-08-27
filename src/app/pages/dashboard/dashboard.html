@@ -1,0 +1,33 @@
+<h2>Dshboard</h2>
+
+@if (carregando()) {
+<p>Carregando...</p>
+} @else {
+<h3>Alerta de estoque mínimo</h3>
+
+@if(produtosEmAlerta().length === 0) {
+<p>Tudo em ordem - nenhum produto abaixo do estoque mínimo</p>
+} @else {
+<p>{{ produtosEmAlerta().length }} produtos(s) precisam de atenção:</p>
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Estoque atual</th>
+            <th>Estoque mínimo</th>
+            <th>Fornecedor</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (p of produtosEmAlerta(); track p.id){
+        <tr>
+            <td>{{ p.nome }}</td>
+            <td>{{ p.estoqueAtual }}</td>
+            <td>{{ p.estoqueMinimo }}</td>
+            <td>{{ p.nomeFornecedor }}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+}

@@ -81,4 +81,34 @@ export class OrdemDeCompra implements OnInit {
       }
     });
   }
+
+  exportarTxt(): void {
+    const ordem = this.ordemGerada();
+    if (!ordem) return;
+
+    const linhas: string[] = [];
+    linhas.push('ORDEM DE COMPRA');
+    linhas.push(`Fornecedor: ${ordem.nomeFornecedor}`);
+    linhas.push(`Referência: ${ordem.mes}/${ordem.ano}`);
+    linhas.push('');
+    linhas.push('Produtos a comprar:')
+    linhas.push('');
+
+
+    for (const item of ordem.itens) {
+      if (item.necessitaCompra) {
+        linhas.push(`- ${item.nomeProduto}: ${item.quantidadeSugerida} ${item.unidade}`);
+      }
+    }
+    const conteudo = linhas.join('\n');
+    const blob = new Blob([conteudo], { type: 'text/plan;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ordem-conpra-${ordem.nomeFornecedor}.txt`
+    link.click()
+
+    URL.revokeObjectURL(url);
+  }
 }
